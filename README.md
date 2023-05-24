@@ -1,2 +1,5 @@
 # bbdevdays23
-Run npm install to setup the project.
+Run the following to get started.
+  ```sh
+  npm install
+  ```

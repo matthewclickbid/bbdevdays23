@@ -4,13 +4,9 @@ import "./style.css";
 
 const CB_API = import.meta.env.VITE_CLICKBID_API;
 const CB_UID = import.meta.env.VITE_CLICKBID_UID;
-const RE_API = import.meta.env.VITE_RE_API_TOKEN;
 const RE_SUB_KEY = import.meta.env.VITE_RE_SUB_KEY;
 const RE_TOKEN = import.meta.env.VITE_RE_TOKEN;
-const RE_CLIENT_ID = import.meta.env.VITE_RE_CLIENT_ID;
-const RE_CLIENT_SECRET = import.meta.env.VITE_RE_CLIENT_SECRET;
 const CB_ROOT_API = import.meta.env.VITE_CB_ROOT_API;
-const RE_ROOT_REDIRECT = import.meta.env.VITE_RE_ROOT_REDIRECT;
 const RE_ROOT_API = import.meta.env.VITE_RE_ROOT_API;
 
 const count = 20;

@@ -12,13 +12,16 @@ const RE_CLIENT_SECRET = import.meta.env.VITE_RE_CLIENT_SECRET;
 const CB_ROOT_API = import.meta.env.VITE_CB_ROOT_API;
 const RE_ROOT_REDIRECT = import.meta.env.VITE_RE_ROOT_REDIRECT;
 const RE_ROOT_API = import.meta.env.VITE_RE_ROOT_API;
-const count = 50;
-const blurCount = 10;
+
+const count = 20;
+
 let cbTs = 1;
 let reTs = "2023-05-15T17:59:31.1600745-04:00";
+
 let namesIndex = 0;
 let names = [];
 let total = 0;
+
 let stage;
 let USDollar = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -38,23 +41,19 @@ async function fetchClickBid() {
     console.log("error", response.status);
   } else {
     let data = await response.json();
-    if (data.resultCode != "001") {
-      console.log("error", data.resultCode);
-    } else {
-      cbTs = data.time_stamp;
-      console.log(data);
-      let i = 1;
-      while (i < data.count) {
-        randomHeart(data.bids[i].bid_amount);
-        addName(data.bids[i].first_name + " " + data.bids[i].last_name);
-        updateTotal(data.bids[i].bid_amount);
-        await delay(3000);
-        i++;
-      }
-      setTimeout(() => {
-        fetchClickBid();
-      }, 4000);
+    cbTs = data.time_stamp;
+    console.log(data);
+    let i = 1;
+    while (i < data.count) {
+      randomHeart(data.bids[i].bid_amount);
+      addName(data.bids[i].first_name + " " + data.bids[i].last_name);
+      updateTotal(data.bids[i].bid_amount);
+      await delay(3000);
+      i++;
     }
+    setTimeout(() => {
+      fetchClickBid();
+    }, 4000);
   }
 }
 
@@ -71,44 +70,22 @@ async function fetchREData() {
   );
   if (response.status >= 400) {
     console.log("error", response.status, response);
-    getREToken();
   } else {
     let data = await response.json();
     console.log(data);
-    if (data.statusCode >= 400) {
-      console.log("error", data.statusCode);
-    } else {
-      var date = new Date();
-      reTs = date.toISOString();
-      let i = 0;
-      while (i < data.count) {
-        randomHeart(data.value[i].amount.value);
-        updateTotal(data.value[i].amount.value);
-        await delay(3000);
-        i++;
-      }
-      setTimeout(() => {
-        fetchREData();
-      }, 4000);
+    var date = new Date();
+    reTs = date.toISOString();
+    let i = 0;
+    while (i < data.count) {
+      randomHeart(data.value[i].amount.value);
+      updateTotal(data.value[i].amount.value);
+      await delay(3000);
+      i++;
     }
+    setTimeout(() => {
+      fetchREData();
+    }, 4000);
   }
-}
-
-async function getREToken() {
-  let formData = new FormData();
-  formData.append("refresh_token", RE_API);
-  formData.append("grant_type", "refresh_token");
-  formData.append("redirect_uri", "http://localhost/black-baud-auth");
-  let response = await fetch(RE_ROOT_REDIRECT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencode",
-      Authorization:
-        "Basic " + window.btoa(`${RE_CLIENT_ID}:${RE_CLIENT_SECRET}`),
-    },
-    form_params: formData,
-  });
-  console.log(response);
 }
 
 function delay(time) {
@@ -120,15 +97,12 @@ function startBlur() {
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
       makeLight(i);
-    }, 50 * i);
+    }, 500 * i);
   }
 }
 
 function makeLight(i) {
   let span = document.createElement("span");
-  if (i < blurCount) {
-    span.classList.add("blur");
-  }
   stage.appendChild(span);
 
   gsap.set(span, {
@@ -146,53 +120,28 @@ function makeLight(i) {
     },
   });
 
-  if (i < blurCount) {
-    tl.to(span, {
-      opacity: gsap.utils.random(0.1, 0.2),
+  tl.to(span, {
+    opacity: gsap.utils.random(0.5, 0.8),
+    duration: 0.3,
+  });
+  tl.to(
+    span,
+    {
+      x: gsap.utils.random(-40, 40),
+      y: gsap.utils.random(-40, 40),
+      duration: gsap.utils.random(5, 7, 0.2),
+      ease: Power0.easeNone,
+    },
+    -0.3
+  );
+  tl.to(
+    span,
+    {
+      opacity: 0,
       duration: 0.3,
-    });
-    tl.to(
-      span,
-      {
-        x: gsap.utils.random(-100, 100),
-        y: gsap.utils.random(-100, 100),
-        duration: gsap.utils.random(5, 7, 0.2),
-        ease: Power0.easeNone,
-      },
-      -0.3
-    );
-    tl.to(
-      span,
-      {
-        opacity: 0,
-        duration: 0.3,
-      },
-      ">-.3"
-    );
-  } else {
-    tl.to(span, {
-      opacity: gsap.utils.random(0.5, 0.8),
-      duration: 0.3,
-    });
-    tl.to(
-      span,
-      {
-        x: gsap.utils.random(-40, 40),
-        y: gsap.utils.random(-40, 40),
-        duration: gsap.utils.random(5, 7, 0.2),
-        ease: Power0.easeNone,
-      },
-      -0.3
-    );
-    tl.to(
-      span,
-      {
-        opacity: 0,
-        duration: 0.3,
-      },
-      ">-.3"
-    );
-  }
+    },
+    ">-.3"
+  );
   tl.play();
 }
 
@@ -208,9 +157,9 @@ function randomHeart(amount) {
 
   notices.appendChild(span);
 
-  var startx = Math.random() * window.innerWidth;
+  var startx = gsap.utils.random(0, stage.offsetWidth);
   var endx = gsap.utils.random(-200, 200);
-  console.log(startx, endx);
+
   gsap.set(span, {
     left: startx,
     bottom: -100,
@@ -224,12 +173,10 @@ function randomHeart(amount) {
       span.remove();
     },
   });
-
   tl.to(span, {
     opacity: 1,
-    duration: 0.3,
+    duration: 0.8,
   });
-
   tl.to(
     span,
     {
@@ -238,9 +185,8 @@ function randomHeart(amount) {
       duration: gsap.utils.random(6, 8, 0.2),
       ease: Power0.easeNone,
     },
-    -0.3
+    -0.8
   );
-
   tl.to(
     span,
     {
@@ -249,13 +195,11 @@ function randomHeart(amount) {
     },
     ">-.3"
   );
-
   tl.play();
 }
 
 function addName(name) {
   names.splice(namesIndex, 0, name);
-  console.log(names);
 }
 
 function rotateNames() {
@@ -287,13 +231,6 @@ function floatAnimation(div) {
     .to(div, 3, { y: "+=30", ease: Power1.easeInOut })
     .to(div, 2, { y: "-=30", ease: Power1.easeInOut })
     .to(div, 2, { y: "+=30", ease: Power1.easeInOut });
-}
-
-function bouncy(div) {
-  var tl = new gsap.timeline({ repeat: -1, repeatDelay: 2 })
-    .to(div, 0.7, { rotation: 30 })
-    .to(div, 7, { rotation: 0, ease: Elastic.easeOut.config(0.9, 0.1) });
-  setTimeout(bouncy, 12000, div);
 }
 
 function updateTotal(amount) {

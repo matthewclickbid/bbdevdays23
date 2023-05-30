@@ -195,6 +195,7 @@ function randomHeart(amount) {
 }
 
 function addName(name) {
+  // Add name at index and replace nothing (0)
   names.splice(namesIndex, 0, name);
 }
 
@@ -202,7 +203,6 @@ function rotateNames() {
   if (names.length > 0) {
     let elem = document.querySelector(".names");
     elem.innerHTML = elem.innerHTML + "<br>" + names[namesIndex];
-    //elem.scrollTop = elem.scrollHeight
     $(".names").animate({ scrollTop: $(".names")[0].scrollHeight }, 2000);
     if (namesIndex == names.length - 1) {
       namesIndex = 0;

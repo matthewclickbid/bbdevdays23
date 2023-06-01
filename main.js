@@ -1,6 +1,8 @@
-import $ from "jquery";
 import { gsap, Power0, Power1 } from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import "./style.css";
+
+gsap.registerPlugin(ScrollToPlugin);
 
 const CB_API = import.meta.env.VITE_CLICKBID_API;
 const CB_UID = import.meta.env.VITE_CLICKBID_UID;
@@ -42,7 +44,6 @@ async function fetchClickBid() {
     let i = 1;
     while (i < data.count) {
       randomHeart(data.bids[i].bid_amount);
-      addName(data.bids[i].first_name + " " + data.bids[i].last_name);
       updateTotal(data.bids[i].bid_amount);
       await delay(3000);
       i++;
@@ -194,28 +195,9 @@ function randomHeart(amount) {
   tl.play();
 }
 
-function addName(name) {
-  // Add name at index and replace nothing (0)
-  names.splice(namesIndex, 0, name);
-}
-
-function rotateNames() {
-  if (names.length > 0) {
-    let elem = document.querySelector(".names");
-    elem.innerHTML = elem.innerHTML + "<br>" + names[namesIndex];
-    $(".names").animate({ scrollTop: $(".names")[0].scrollHeight }, 2000);
-    if (namesIndex == names.length - 1) {
-      namesIndex = 0;
-    } else {
-      namesIndex++;
-    }
-  }
-}
-
 function floatAnimation(div) {
   const tlCan = new gsap.timeline({ repeat: -1 });
   const ran1 = Math.random() * 20;
-
   tlCan
     .to(div, 3, { y: "-=3", x: "+=3", rotation: "-=1", ease: Power1.easeInOut })
     .to(div, 2, { y: "+=4", x: "-=4", rotation: "-=1", ease: Power1.easeInOut })
@@ -239,7 +221,6 @@ window.onload = () => {
   startBlur();
   fetchClickBid();
   fetchREData();
-  setInterval(rotateNames, 4000);
   floatAnimation(".recent_donors");
   floatAnimation(".qr");
   floatAnimation(".total");

@@ -1,8 +1,5 @@
 import { gsap, Power0, Power1 } from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import "./style.css";
-
-gsap.registerPlugin(ScrollToPlugin);
 
 const CB_API = import.meta.env.VITE_CLICKBID_API;
 const CB_UID = import.meta.env.VITE_CLICKBID_UID;
@@ -10,16 +7,10 @@ const RE_SUB_KEY = import.meta.env.VITE_RE_SUB_KEY;
 const RE_TOKEN = import.meta.env.VITE_RE_TOKEN;
 const CB_ROOT_API = import.meta.env.VITE_CB_ROOT_API;
 const RE_ROOT_API = import.meta.env.VITE_RE_ROOT_API;
-
 const count = 20;
-
 let cbTs = 1;
 let reTs = "2023-05-15T17:59:31.1600745-04:00";
-
-let namesIndex = 0;
-let names = [];
 let total = 0;
-
 let stage;
 let USDollar = new Intl.NumberFormat("en-US", {
   style: "currency",

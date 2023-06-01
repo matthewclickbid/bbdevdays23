@@ -29,7 +29,7 @@ Use the following information to help you.
 This code utilizes the V3 API from ClickBid. Specifically the endpoint:
 
 > https://cbo.bid/api/v3/bigboard.php/bigboard/bids/TIMESTAMP
-> Authorization: Basic Event ID:API KEY
+> Authorization: Basic (Event ID:API KEY)
 
 This endpoint allows you to gather bids from a ClickBid event based on a starting point. TIMESTAMP in this case refers to a UNIX timestamp value. For your first call, you can pass a 1 which will represent all donations since the beginning of the event.
 

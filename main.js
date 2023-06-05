@@ -67,7 +67,7 @@ async function fetchREData() {
     while (i < data.count) {
       randomHeart(data.value[i].amount.value);
       updateTotal(data.value[i].amount.value);
-      await delay(3000);
+      await delay(2000);
       i++;
     }
     setTimeout(() => {
@@ -128,7 +128,7 @@ function makeLight(i) {
       opacity: 0,
       duration: 0.3,
     },
-    ">-.3"
+    ">-0.3"
   );
   tl.play();
 }
@@ -188,7 +188,6 @@ function randomHeart(amount) {
 
 function floatAnimation(div) {
   const tlCan = new gsap.timeline({ repeat: -1 });
-  const ran1 = Math.random() * 20;
   tlCan
     .to(div, 3, { y: "-=3", x: "+=3", rotation: "-=1", ease: Power1.easeInOut })
     .to(div, 2, { y: "+=4", x: "-=4", rotation: "-=1", ease: Power1.easeInOut })
@@ -212,7 +211,6 @@ window.onload = () => {
   startBlur();
   fetchClickBid();
   fetchREData();
-  floatAnimation(".recent_donors");
   floatAnimation(".qr");
   floatAnimation(".total");
 };
